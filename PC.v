@@ -12,6 +12,6 @@ initial
 always @(posedge clk) 
     begin
         if(enable==1'b1)
-            out=in;
+            out<=in;
    end
 endmodule

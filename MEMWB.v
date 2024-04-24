@@ -1,7 +1,12 @@
-module MEMWB(clock,iRegDests,iRegWrite,iALUSrc,iMemRead,iMemWrite,iMemToReg,iBranchs,iJumps,iALUCtrl,
+module MEMWB(clock,
+iRegDests,iRegWrite,iALUSrc,iMemRead,iMemWrite,
+iMemToReg,iBranchs,iJumps,iALUCtrl,
 iIR,iB,iResult,iRegDest,
-oRegDests,oRegWrite,oALUSrc,oMemRead,oMemWrite,oMemToReg,oBranchs,oJumps,oALUCtrl,
-oIR,oB,oResult,oRegDest,enable);
+
+oRegDests,oRegWrite,oALUSrc,oMemRead,
+oMemWrite,oMemToReg,oBranchs,oJumps,oALUCtrl,
+oIR,oB,oResult,oRegDest,
+enable);
 
 
 input [31:0] iIR,iB,iResult;

@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 module data_mem(
-    output reg [31:0] out32, input [31:0] address , input [31:0] writeData ,input memwrite ,  memread ,clk
+    output reg [31:0] out32, 
+    input [31:0] address , 
+    input [31:0] writeData ,
+    input memwrite ,  memread ,clk
     );
 
     reg [7:0] mem [255:0];
@@ -17,14 +20,12 @@ module data_mem(
         mem[6] = 8'h00;
         mem[7] = 8'h06;
         
-        mem[32'h1A3BEE28] = 8'h11;
-        mem[32'h1A3BEE29] = 8'h11;
-        mem[32'h1A3BEE2A] = 8'h11;
-        mem[32'h1A3BEE2B] = 8'h11;
+        mem[252] = 8'h11;
+        mem[253] = 8'h11;
+        mem[254] = 8'h11;
+        mem[255] = 8'h11;
         
     end
-
-
 
     always @(posedge clk ) begin
         if (memwrite) begin
@@ -45,3 +46,30 @@ module data_mem(
     end
 
 endmodule
+
+// Testbench for this module
+// module data_mem_tb();
+//     reg [31:0] address;
+//     reg [31:0] writeData;
+//     reg memwrite, memread, clk;
+//     wire [31:0] out32;
+
+//     data_mem data_mem1(out32, address, writeData, memwrite, memread, clk);
+
+//     initial begin
+//         $dumpfile("data_mem.vcd");
+//         $dumpvars(0,data_mem1);
+
+//         address= 32'd252;
+//         writeData=32'h11111111;
+//         memwrite=1'b1;
+//         clk=1'b0;
+//         #10 clk=1'b1;
+//         #10 clk=1'b0;
+//         memwrite=1'b0;
+//         memread=1'b1;
+//         #10 clk=1'b1;
+//         #10 clk=1'b0;
+//         $finish;
+//     end
+// endmodule
