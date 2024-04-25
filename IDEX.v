@@ -2,15 +2,15 @@
 module IDEX(clock,
 iRegDests,iRegWrite,iALUSrc,iMemRead,
 iMemWrite,iMemToReg,iBranchs,iJumps,iALUCtrl,
-iIR,iPC,iA,iB,iRegDest,iBranch,iJump,
+iIR,iPC,iA,iB,iRegDest,iBranch,iJump,isignext,
 
 oRegDests,oRegWrite,oALUSrc,oMemRead,oMemWrite,
 oMemToReg,oBranchs,oJumps,oALUCtrl,
-oIR,oPC,oA,oB,oRegDest,oBranch,oJump,
+oIR,oPC,oA,oB,oRegDest,oBranch,oJump,osignext,
 enable);
 
 // Nomenclature is 'i<name>' for input and 'o<name>' for output
-input [31:0] iIR,iPC,iA,iB,iBranch,iJump;
+input [31:0] iIR,iPC,iA,iB,iBranch,iJump,isignext;
 input clock,enable;
 input iRegDests,iRegWrite,iALUSrc,iMemRead,iMemWrite,iMemToReg,iBranchs,iJumps;
 input [3:0]iALUCtrl;
@@ -19,8 +19,7 @@ output [31:0] oIR,oPC,oA,oB,oBranch,oJump;
 output oRegDests,oRegWrite,oALUSrc,oMemRead,oMemWrite,oMemToReg,oBranchs,oJumps;
 output [3:0]oALUCtrl;
 output [4:0]oRegDest;
-reg [31:0] oIR,oPC,oA,oB,oResult,oBranch,oJump;
-reg oZero;
+reg [31:0] oIR,oPC,oA,oB,osignext,oBranch,oJump;
 reg oRegDests,oRegWrite,oALUSrc,oMemRead,oMemWrite,oMemToReg,oBranchs,oJumps;
 reg [3:0]oALUCtrl;
 reg [4:0]oRegDest;
@@ -49,6 +48,7 @@ begin
         oRegDest<=iRegDest;
         oBranch<=iBranch;
         oJump<=iJump;
+        osignext<=isignext;
     end
 end
 endmodule
