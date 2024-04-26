@@ -17,6 +17,10 @@ module top(input clk);
         .out(pc_input)
     );
 
+    //stallcontrol
+    
+
+
 
     wire [31:0] instrread_output;
 
@@ -27,9 +31,25 @@ module top(input clk);
         .clk(clk)
     );
 
-    wire enable_ifid; // from the hazard detection unit
+    wire enable_ifid,enable_idex,enable_exmem,enable_memwb; // from the hazard detection unit
     wire [31:0] ifid_instruction;
     wire [31:0] ifid_pcplus4;
+
+
+    StallControl stall(
+        .PC_WriteEn(pc_write_enable),
+        .IFID_WriteEn(enable_ifid),
+        .IDEX_WriteEn(enable_idex),
+        .EXMEM_WriteEN(enable_exmem),
+        .MEMWB_WriteEn(enable_memwb),
+        .EX_MemRead(EX_MemRead),
+        .EX_rt(EX_rt),
+        .ID_rs(ID_rs),
+        .ID_rt(ID_rt),
+        .ID_Op(ID_Op)
+        .Stall_flush(nop_mux_sel)
+    );
+
 
     IFID ifid(
         .clk(clk),
@@ -119,7 +139,7 @@ module top(input clk);
     wire[3:0] EX_ALUCtrl;
     wire[4:0] EX_RegDest;
 
-    wire enable_idex; // from the hazard detection unit
+     // from the hazard detection unit
 
     IDEX idex(
         .clock(clk),
@@ -169,7 +189,8 @@ module top(input clk);
         .ID_EX_rt(EX_IR[20:16]),
         .EX_MEM_RegWrite(EX_RegWrite),
         .MEM_WB_RegWrite(regwrite),
-
+        .EX_ALUSrcA(EX_ALUSrc),
+        .MEM_ALUSrcB(EX_ALUSrc),
         .forwardA(forwardA),
         .forwardB(forwardB)
     );
@@ -182,7 +203,7 @@ module top(input clk);
         .in_1(mem_aluout),
         .in_2(wbwrite_data),
         .in_3(32'h0),
-        .sel(),
+        .sel(forwardA),
         .Out(ex_aluin1)
     );
 
@@ -191,7 +212,7 @@ module top(input clk);
         .in_1(EX_signext),
         .in_2(mem_aluout),
         .in_3(wbwrite_data),
-        .sel(),
+        .sel(forwardB),
         .Out(ex_aluin2)
     );
 
@@ -207,8 +228,7 @@ module top(input clk);
         .lt(ex_lt),
         .gt(ex_gt)
     );
+
     
-
-
 
 endmodule
