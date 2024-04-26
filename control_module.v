@@ -1,0 +1,1 @@
+//mips control module only for ORI,LW,SUB, XOr

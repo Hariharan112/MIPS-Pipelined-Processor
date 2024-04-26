@@ -10,25 +10,16 @@ module data_mem(
     reg [7:0] mem [255:0];
 
     initial begin // Used from MIPS-Multicycle-Processor
-        mem[0] = 8'h00;
-        mem[1] = 8'h00;
-        mem[2] = 8'h00;
-        mem[3] = 8'h00;
-
-        mem[4] = 8'hFF;
-        mem[5] = 8'hFF;
-        mem[6] = 8'hFF;
-        mem[7] = 8'hFF;
 
         mem[8] = 8'h00;
         mem[9] = 8'h00;
         mem[10] = 8'h00;
-        mem[11] = 8'h00;
+        mem[11] = 8'h08;
         
-        mem[252] = 8'h00;
-        mem[253] = 8'h00;
-        mem[254] = 8'h00;
-        mem[255] = 8'h00;
+        mem[12] = 8'hFF;
+        mem[13] = 8'hFF;
+        mem[14] = 8'hFF;
+        mem[15] = 8'hFF;
         
     end
 

@@ -18,8 +18,6 @@ module top(input clk);
     );
     
 
-
-
     wire [31:0] instrread_output;
 
     IMemBank instr_mem(

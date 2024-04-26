@@ -7,10 +7,18 @@ module RegFile (
 
     //intialize the register file. Used from old code
     initial begin
+        regFile[0] = 32'h0;
         regFile[1] = 32'h0;
-        regFile[2] = 25;
-        regFile[3] = 40;
-        regFile[5] = 32'h1A3BEE22;
+        regFile[2] = 6;
+        regFile[3] = 0;
+        regFile[4] = 32'h0E311;
+        regFile[5] = 32'h944EB;
+        regFile[6] = 32'h0;
+        regFile[7] = 32'h964EA;
+        regFile[8] = 32'h113D4;
+        regFile[9] = 32'h0;
+        regFile[10] = 32'h1230B;
+
     end
 
     always @(posedge clk) begin
