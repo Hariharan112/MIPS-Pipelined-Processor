@@ -2,8 +2,8 @@
 
 `timescale 1 ps / 100 fs
 
-module StallControl(PC_WriteEn,IFID_WriteEn,Stall_flush,EX_MemRead,EX_rt,ID_rs,ID_rt,ID_Op);
-output PC_WriteEn,IFID_WriteEn,Stall_flush;
+module StallControl(PC_WriteEn,IFID_WriteEn,IDEX_WriteEn,EXMEM_WriteEN,MEMWB_WriteEn,Stall_flush,EX_MemRead,EX_rt,ID_rs,ID_rt,ID_Op);
+output PC_WriteEn,IFID_WriteEn,Stall_flush,IDEX_WriteEn,EXMEM_WriteEN,MEMWB_WriteEn;
 wire PC_WriteEn,IFID_WriteEn,Stall_flush;
 input EX_MemRead,EX_rt,ID_rs,ID_rt;
 input [5:0] ID_Op;
@@ -17,12 +17,18 @@ begin
   begin
   PC_WriteEn = 1'b0;
   IFID_WriteEn = 1'b0;
+  IDEX_WriteEn = 1'b0;
+  EXMEM_WriteEN = 1'b0;
+  MEMWB_WriteEn = 1'b0;
   Stall_flush = 1'b1;
   end
   else
   begin
   PC_WriteEn = 1'b1;
   IFID_WriteEn = 1'b1;
+  IDEX_WriteEn = 1'b1;
+  EXMEM_WriteEN = 1'b1;
+  MEMWB_WriteEn = 1'b1;
   Stall_flush = 1'b0;
   end
 end
