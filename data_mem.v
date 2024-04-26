@@ -11,19 +11,24 @@ module data_mem(
 
     initial begin // Used from MIPS-Multicycle-Processor
         mem[0] = 8'h00;
-        mem[1] = 8'h43;
-        mem[2] = 8'h08;
-        mem[3] = 8'h22;
+        mem[1] = 8'h00;
+        mem[2] = 8'h00;
+        mem[3] = 8'h00;
 
-        mem[4] = 8'h8C;
-        mem[5] = 8'hA4;
-        mem[6] = 8'h00;
-        mem[7] = 8'h06;
+        mem[4] = 8'hFF;
+        mem[5] = 8'hFF;
+        mem[6] = 8'hFF;
+        mem[7] = 8'hFF;
+
+        mem[8] = 8'h00;
+        mem[9] = 8'h00;
+        mem[10] = 8'h00;
+        mem[11] = 8'h00;
         
-        mem[252] = 8'h11;
-        mem[253] = 8'h11;
-        mem[254] = 8'h11;
-        mem[255] = 8'h11;
+        mem[252] = 8'h00;
+        mem[253] = 8'h00;
+        mem[254] = 8'h00;
+        mem[255] = 8'h00;
         
     end
 
@@ -36,7 +41,7 @@ module data_mem(
         end
     end
 
-     always @(* )  begin // Not negedge? I thought this was negedge?
+     always @(*)  begin // Not negedge? I thought this was negedge?
         if (memread) begin
             out32[31:24] <= mem[address];
             out32[23:16] <= mem[address+1];
