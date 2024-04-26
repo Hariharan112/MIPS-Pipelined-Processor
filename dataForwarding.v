@@ -7,6 +7,7 @@ module ForwardingUnit(
     input [4:0] ID_EX_rt,
     input EX_MEM_RegWrite,
     input MEM_WB_RegWrite,
+    input[1:0] EX_ALUSrc
 
     output reg [1:0] forwardA,
     output reg [1:0] forwardB
@@ -14,6 +15,8 @@ module ForwardingUnit(
 
 always(*) 
     begin
+        forwardA <= 2'b00;
+        forwardB <= 2'b00;
         // EX hazard
         if(EX_MEM_RegWrite) begin
             if(EX_MEM_rd == ID_EX_rs) begin
