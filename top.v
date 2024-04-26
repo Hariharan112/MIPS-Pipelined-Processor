@@ -41,8 +41,9 @@ module top(input clk);
     );
 
     wire[31:0] wbwrite_data;//comes from WB stage
-    wire[4:0] wbwrite_reg;//comes from WB stage
+    wire[4:0] wb_write_reg;//comes from WB stage
     wire regwrite;//comes from WB stage
+    
     wire [31:0] idregA,idregB;
     RegFile regfile(
         .regA(regA),
@@ -89,6 +90,7 @@ module top(input clk);
      wire [3:0] id_nop_ALUCtrl;
     wire id_nop_RegDests,id_nop_RegWrite,id_nop_ALUSrc,id_nop_MemRead,id_nop_MemWrite,id_nop_MemToReg,id_nop_Branchs,id_nop_Jumps;
 
+    //
     ControlMux controlmux(
         .sel(nop_mux_sel),
         .RegDests(idRegDests),
@@ -112,7 +114,7 @@ module top(input clk);
     );
 
     //IDEX module
-    wire[31:0] EX_IR,EX_PC,EX_A,EX_B,EX_Branch,EX_Jump;
+    wire[31:0] EX_IR,EX_PC,EX_A,EX_B,EX_Branch,EX_Jump,EX_signext;
     wire EX_RegDests,EX_RegWrite,EX_ALUSrc,EX_MemRead,EX_MemWrite,EX_MemToReg,EX_Branchs,EX_Jumps;
     wire[3:0] EX_ALUCtrl;
     wire[4:0] EX_RegDest;
@@ -134,6 +136,7 @@ module top(input clk);
         .iPC(ifid_pcplus4),
         .iA(idregA),
         .iB(idregB),
+        .isignext(.idsignext),
         .iRegDest(ifid_instruction[15:11]),
         .iBranch(ifid_instruction[15:0]),
         .iJump(ifid_instruction[25:0]),
@@ -150,27 +153,62 @@ module top(input clk);
         .oPC(EX_PC),
         .oA(EX_A),
         .oB(EX_B),
+        .osignext(EX_signext),
         .oRegDest(EX_RegDest),
         .enable(enable_idex)
     );
 
+    wire [31:0] mem_write_reg; //comes from MEM stage
+
+    wire [1:0] forwardA,forwardB;
+
+    ForwardingUnit forward(
+        .EX_MEM_rd(EX_RegDest),
+        .MEM_WB_rd(wb_write_reg),
+        .ID_EX_rs(EX_IR[25:21]),
+        .ID_EX_rt(EX_IR[20:16]),
+        .EX_MEM_RegWrite(EX_RegWrite),
+        .MEM_WB_RegWrite(regwrite),
+
+        .forwardA(forwardA),
+        .forwardB(forwardB)
+    );
 
     
 
+    wire [31:0] mem_aluout,mem_pcplus4,mem_write_data;
+    mux_4x1 in1mux(
+        .in_0(EX_A),
+        .in_1(mem_aluout),
+        .in_2(wbwrite_data),
+        .in_3(32'h0),
+        .sel(),
+        .Out(ex_aluin1)
+    );
 
+    mux_4x1 in2mux(
+        .in_0(EX_B),
+        .in_1(EX_signext),
+        .in_2(mem_aluout),
+        .in_3(wbwrite_data),
+        .sel(),
+        .Out(ex_aluin2)
+    );
 
+    wire [31:0] ex_aluin1,ex_aluin2,ex_aluout;
+    wire ex_zero,ex_lt,ex_gt;
 
-
-
-
-
-
-
-
-
-
-
+    ALU alu(
+        .data1(ex_aluin1),
+        .data2(ex_aluin2),
+        .aluoperation(EX_ALUCtrl),
+        .result(ex_aluout),
+        .zero(ex_zero),
+        .lt(ex_lt),
+        .gt(ex_gt)
+    );
     
+
 
 
 endmodule
