@@ -2,21 +2,21 @@
 module EXMEM(clock,
 iRegDests,iRegWrite,iALUSrc,
 iMemRead,iMemWrite,iMemToReg,iBranchs,iJumps,iALUCtrl,
-iIR,iPC,iB,iResult,iRegDest,iBranch,iJump,iZero,
+iIR,iPC,iB,iResult,iRegDest,iBranch,iJump,iZero,iALUOut,isignext,
 
 oRegDests,oRegWrite,oALUSrc,oMemRead,oMemWrite,
-oMemToReg,oBranchs,oJumps,oALUCtrl,
-oIR,oPC,oB,oResult,oRegDest,oBranch,oJump,oZero,
+oMemToReg,oBranchs,oJumps,oALUCtrl,oALUOut,
+oIR,oPC,oB,oResult,oRegDest,oBranch,oJump,oZero,osignext,
 enable);
 
 // Nomenclature is 'i<name>' for input and 'o<name>' for output
 
-input [31:0] iIR,iPC,iB,iResult,iBranch,iJump;
+input [31:0] iIR,iPC,iB,iResult,iBranch,iJump,iALUOut,isignext;
 input iZero,clock,enable;
 input iRegDests,iRegWrite,iALUSrc,iMemRead,iMemWrite,iMemToReg,iBranchs,iJumps;
 input [3:0]iALUCtrl;
 input [4:0] iRegDest;
-output reg [31:0] oIR,oPC,oB,oResult,oBranch,oJump;
+output reg [31:0] oIR,oPC,oB,oResult,oBranch,oJump,oALUOut,osignext;
 output reg oZero;
 output reg oRegDests,oRegWrite,oALUSrc,oMemRead,oMemWrite,oMemToReg,oBranchs,oJumps;
 output reg [3:0]oALUCtrl;
@@ -40,8 +40,10 @@ if(enable)begin
     oBranchs<=iBranchs;
     oJumps<=iJumps;
     oALUCtrl<=iALUCtrl;
+    oALUOut<=iALUOut;
     oIR<=iIR;
     oPC<=iPC;
+    osignext<=isignext;
     oB<=iB;
     oResult<=iResult;
     oRegDest<=iRegDest;

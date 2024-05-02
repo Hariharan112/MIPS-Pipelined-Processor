@@ -14,16 +14,14 @@ module IMemBank(input memread, input [31:0] address, output reg [31:0] readdata,
     mem_array[0] = 32'h88C220002;
     mem_array[4] = 32'h8C810004;
     mem_array[8] = 32'h00653022;
-    mem_array[12] = 32'00E64026;
-    mem_array[16] = 32'35490016;
-
+    mem_array[12] = 32'h00E64026;
+    mem_array[16] = 32'h35490016;
 
   end
   always@(posedge clk)
   begin
     if(memread)begin
-      temp = address>>2;
-      readdata = mem_array[temp];
+    readdata=mem_array[address];
     end
   end
   endmodule

@@ -14,31 +14,29 @@ module ForwardingUnit(
     output reg [1:0] forwardB
 );
 
-always(*) 
+always @(*) 
     begin
-        forwardA <= EX_ALUSrcA;
-        forwardB <= MEM_ALUSrcB;
+        forwardA = EX_ALUSrcA;
+        forwardB = MEM_ALUSrcB;
         // EX hazard
         if(EX_MEM_RegWrite) begin
             if(EX_MEM_rd == ID_EX_rs) begin
-                forwardA <= 2'b10;
+                forwardA = 2'b10;
             end
             else if(EX_MEM_rd == ID_EX_rt) begin
-                forwardB <= 2'b10;
+                forwardB = 2'b10;
             end
         end
 
         // MEM Hazard
         else if(MEM_WB_RegWrite) begin
             if(MEM_WB_rd == ID_EX_rs) begin
-                forwardA <= 2'b01;
+                forwardA = 2'b01;
             end
             else if(MEM_WB_rd == ID_EX_rt) begin
-                forwardB <= 2'b01;
+                forwardB = 2'b01;
             end
         end
     end
-
-
 
 endmodule

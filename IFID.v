@@ -1,15 +1,16 @@
+`timescale 1ns / 1ps
 module IFID( clk, instruction, enable, PCp4, instruction_out, PCp4_out);
     
-    input clk,
-    input [31:0] instruction,
-    input [31:0] PCp4,
-    input enable,
-    output reg [31:0] instruction_out,
-    output reg [31:0] PCp4_out
+    input clk;
+    input [31:0] instruction;
+    input [31:0] PCp4;
+    input enable;
+    output reg [31:0] instruction_out;
+    output reg [31:0] PCp4_out;
     
     initial begin
         instruction_out <= 32'b0;
-        PCp4 <= 32'b0;
+        PCp4_out <= 32'b0;
     end
     
     always @(posedge clk) begin

@@ -8,12 +8,12 @@ module top(input clk);
         .in(pc_input),
         .clk(clk),
         .out(pc_output),
-        .enable(1'b)
+        .enable(1'b1)
     );
 
     adder32bit pc_adder(
-        .in_0(pc_output),
-        .in_1(32'h4),
+        .in1(pc_output),
+        .in2(32'h4),
         .out(pc_input)
     );
     
@@ -30,7 +30,7 @@ module top(input clk);
     wire enable_ifid,enable_idex,enable_exmem,enable_memwb; // from the hazard detection unit
     wire [31:0] ifid_instruction;
     wire [31:0] ifid_pcplus4;
-
+    wire nop_mux_sel;
 
     StallControl stall(
         .PC_WriteEn(pc_write_enable),
@@ -42,7 +42,7 @@ module top(input clk);
         .EX_rt(EX_rt),
         .ID_rs(ID_rs),
         .ID_rt(ID_rt),
-        .ID_Op(ID_Op)
+        .ID_Op(ID_Op),
         .Stall_flush(nop_mux_sel)
     );
 
@@ -96,12 +96,12 @@ module top(input clk);
     
     wire [31:0] idsignext;
     
-    signextender signextend(
-        .in(ifid_instruction[15:0]),
-        .out(idsignext)
+    signExt signextend(
+        .inData(ifid_instruction[15:0]),
+        .outData(idsignext)
     );
 
-    wire nop_mux_sel; // from the hazard detection unit
+     // from the hazard detection unit
     //control signal mux that sets all the control signals to 0 when the instruction is a nop
      wire [3:0] id_nop_ALUCtrl;
     wire id_nop_RegDests,id_nop_RegWrite,id_nop_ALUSrc,id_nop_MemRead,id_nop_MemWrite,id_nop_MemToReg,id_nop_Branchs,id_nop_Jumps;
@@ -117,7 +117,7 @@ module top(input clk);
         .MemToReg(idMemToReg),
         .Branchs(idBranchs),
         .Jumps(idJumps),
-        .ALUCtrl(idALUCtrl)
+        .ALUCtrl(idALUCtrl),
         .RegDests_nop(id_nop_RegDests),
         .RegWrite_nop(id_nop_RegWrite),
         .ALUSrc_nop(id_nop_ALUSrc),
@@ -149,10 +149,11 @@ module top(input clk);
         .iJumps(id_nop_Jumps),
         .iALUCtrl(id_nop_ALUCtrl),
         .iIR(ifid_instruction),
+        .isignext(idsignext),
         .iPC(ifid_pcplus4),
         .iA(idregA),
         .iB(idregB),
-        .isignext(.idsignext),
+        
 
         .iRegDest(ifid_instruction[15:11]),
         .iBranch(ifid_instruction[15:0]),
@@ -246,7 +247,7 @@ module top(input clk);
         .iALUCtrl(EX_ALUCtrl),
         .iIR(EX_IR),
         .iPC(EX_PC),
-        .iA(EX_A),
+
         .iB(EX_B),
         .isignext(EX_signext),
         .iRegDest(EX_RegDest),
@@ -266,7 +267,7 @@ module top(input clk);
         .oALUCtrl(MEM_ALUCtrl),
         .oIR(MEM_IR),
         .oPC(MEM_PC),
-        .oA(MEM_A),
+
         .oB(MEM_B),
         .osignext(MEM_signext),
         .oRegDest(MEM_RegDest),
@@ -320,7 +321,7 @@ module top(input clk);
         .oALUCtrl(wb_ALUCtrl),
         .oBranchs(wb_Branchs),
         .oJumps(wb_Jumps),
-        .oALUCtrl(wb_ALUCtrl),
+       
         .oIR(WB_IR),
         .oB(WB_B),
         .oResult(wb_aluout),

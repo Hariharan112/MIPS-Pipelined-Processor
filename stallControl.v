@@ -4,7 +4,7 @@
 
 module StallControl(PC_WriteEn,IFID_WriteEn,IDEX_WriteEn,EXMEM_WriteEN,MEMWB_WriteEn,Stall_flush,EX_MemRead,EX_rt,ID_rs,ID_rt,ID_Op);
 output PC_WriteEn,IFID_WriteEn,Stall_flush,IDEX_WriteEn,EXMEM_WriteEN,MEMWB_WriteEn;
-wire PC_WriteEn,IFID_WriteEn,Stall_flush;
+reg PC_WriteEn,IFID_WriteEn,Stall_flush,IDEX_WriteEn,EXMEM_WriteEN,MEMWB_WriteEn;
 input EX_MemRead,EX_rt,ID_rs,ID_rt;
 input [5:0] ID_Op;
 wire [4:0] EX_rt,ID_rs,ID_rt,xorRsRt,xorRtRt;
